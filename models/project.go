@@ -28,7 +28,7 @@ func GetUserProjects(uId uint) ([]Project, error) {
 
 	var projects []Project
 
-	if err := DB.Find(&projects, "user_id = ?", uId).Error; err != nil {
+	if err := DB.Order("updated_at DESC").Find(&projects, "user_id = ?", uId).Error; err != nil {
 		return projects, errors.New("projects not found")
 	}
 
@@ -45,5 +45,23 @@ func GetProjectById(pId uint) (Project, error) {
 	}
 
 	return project, nil
+
+}
+
+type UpdateProjectInput struct {
+	Name        string `json:"name" binding:"required"`
+	Description string `json:"description" binding:"required"`
+	IconSrc     string `json:"icon_src" binding:"required"`
+	Color       string `json:"color" binding:"required"`
+	Id          uint   `json:"id" binding:"required"`
+}
+
+func UpdateInformation(input UpdateProjectInput) (Project, error) {
+
+	if err := DB.Model(&Project{}).Update(input).Error; err != nil {
+		return Project{}, errors.New("project not found")
+	}
+
+	return Project{}, nil
 
 }

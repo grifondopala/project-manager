@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"schedule/models"
+	"strconv"
 )
 
 type CreateProjectInput struct {
@@ -42,20 +42,16 @@ func CreateProject(c *gin.Context) {
 
 }
 
-type GetUserProjectsInput struct {
-	UserID uint `json:"user_id" binding:"required"`
-}
-
 func GetUserProjects(c *gin.Context) {
 
-	var input = GetUserProjectsInput{}
+	userId, err := strconv.Atoi(c.Param("user_id"))
 
-	if err := c.ShouldBindJSON(&input); err != nil {
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	projects, err := models.GetUserProjects(input.UserID)
+	projects, err := models.GetUserProjects(uint(userId))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -65,27 +61,40 @@ func GetUserProjects(c *gin.Context) {
 
 }
 
-type GetProjectByIdInput struct {
-	ProjectID uint `json:"project_id" binding:"required"`
-}
-
 func GetProjectById(c *gin.Context) {
 
-	var input = GetProjectByIdInput{}
+	projectId, err := strconv.Atoi(c.Param("project_id"))
 
-	if err := c.ShouldBindJSON(&input); err != nil {
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	fmt.Println(input.ProjectID)
-
-	project, err := models.GetProjectById(input.ProjectID)
+	project, err := models.GetProjectById(uint(projectId))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "success", "projectInfo": project})
+
+}
+
+func UpdateInformation(c *gin.Context) {
+
+	var input = models.UpdateProjectInput{}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	_, err := models.UpdateInformation(input)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "success"})
 
 }

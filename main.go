@@ -26,8 +26,9 @@ func main() {
 
 	projects := r.Group("/projects")
 	projects.POST("/create", controllers.CreateProject)
-	projects.POST("/getUserProjects", controllers.GetUserProjects)
-	projects.POST("/getProjectById", controllers.GetProjectById)
+	projects.GET("/getUserProjects/:user_id", controllers.GetUserProjects)
+	projects.GET("/getProjectById/:project_id", controllers.GetProjectById)
+	projects.PATCH("/updateInformation", controllers.UpdateInformation)
 
 	r.Run(":8080")
 
