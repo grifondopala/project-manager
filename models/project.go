@@ -14,14 +14,23 @@ type Project struct {
 	UserID      uint   `gorm:"not null;" json:"user_id"`
 }
 
-func (p Project) SaveProject() (Project, error) {
+func CreateProject(uId uint) (Project, error) {
+
+	project := Project{
+		Name:        "Untitled",
+		Description: "No description",
+		IconSrc:     "/static/project-icons/planning.png",
+		Color:       "#94e6e3",
+		UserID:      uId,
+	}
 
 	var err error
-	err = DB.Create(&p).Error
+	err = DB.Create(&project).Error
 	if err != nil {
 		return Project{}, err
 	}
-	return p, nil
+
+	return project, nil
 }
 
 func GetUserProjects(uId uint) ([]Project, error) {
