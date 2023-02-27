@@ -42,4 +42,5 @@ func ConnectDataBase() {
 	DB.AutoMigrate(&Task{})
 	DB.AutoMigrate(&Column{})
 	DB.AutoMigrate(&TextPoint{})
+	DB.AutoMigrate(&Section{})
 }

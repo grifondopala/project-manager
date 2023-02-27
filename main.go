@@ -30,6 +30,12 @@ func main() {
 	projects.GET("/getProjectById/:project_id", controllers.GetProjectById)
 	projects.PATCH("/updateInformation", controllers.UpdateInformation)
 
+	columns := r.Group("/columns")
+	columns.PATCH("/update", controllers.UpdateColumn)
+
+	sections := r.Group("/sections")
+	sections.PATCH("/update", controllers.UpdateSection)
+
 	r.Run(":8080")
 
 }

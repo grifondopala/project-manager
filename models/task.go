@@ -7,9 +7,9 @@ import (
 
 type Task struct {
 	gorm.Model
-	OrderNumber uint   `gorm:"not null;" json:"order_number"`
-	ProjectID   uint   `gorm:"not null;" json:"project_id"`
-	Section     string `gorm:"not null;" json:"section"`
+	OrderNumber uint `gorm:"not null;" json:"order_number"`
+	ProjectID   uint `gorm:"not null;" json:"project_id"`
+	SectionID   uint `gorm:"not null;" json:"section_id"`
 }
 
 func (t *Task) Create() (*Task, error) {
@@ -23,9 +23,9 @@ func (t *Task) Create() (*Task, error) {
 
 }
 
-func (t *Task) GetProjectTasks(pId uint) (columns []*Task, err error) {
-	if err := DB.Find(&columns, "project_id = ?", pId).Error; err != nil {
+func (t *Task) GetProjectTasks(pId uint) (tasks []*Task, err error) {
+	if err := DB.Order("section_id ASC").Find(&tasks, "project_id = ?", pId).Error; err != nil {
 		return nil, errors.New("tasks not found")
 	}
-	return columns, nil
+	return tasks, nil
 }

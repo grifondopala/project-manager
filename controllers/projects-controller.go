@@ -39,17 +39,24 @@ func defaultProjectTemplate(pId uint) {
 		OrderNumber: 1,
 		ProjectID:   pId,
 		Type:        "text-point",
+		Width:       200,
 	}).Create()
 	DescriptionCol, _ := (&models.Column{
 		Name:        "Task description",
 		OrderNumber: 2,
 		ProjectID:   pId,
 		Type:        "text-point",
+		Width:       200,
+	}).Create()
+	FirstSection, _ := (&models.Section{
+		Name:        "First Section",
+		OrderNumber: 1,
+		ProjectID:   pId,
 	}).Create()
 	TaskFirst, _ := (&models.Task{
 		OrderNumber: 1,
 		ProjectID:   pId,
-		Section:     "First section",
+		SectionID:   FirstSection.ID,
 	}).Create()
 	_, err := (&models.TextPoint{
 		Text:     "Make your list",
@@ -103,9 +110,9 @@ func GetProjectById(c *gin.Context) {
 		return
 	}
 
-	Columns, Tasks := GetProjectTasks(project.ID)
+	Columns, Tasks, Sections := GetProjectTasks(project.ID)
 
-	c.JSON(http.StatusOK, gin.H{"projectInfo": project, "tasks": Tasks, "columns": Columns})
+	c.JSON(http.StatusOK, gin.H{"projectInfo": project, "tasks": Tasks, "columns": Columns, "sections": Sections})
 }
 
 type TaskT struct {
@@ -113,13 +120,17 @@ type TaskT struct {
 	Points []interface{} `json:"points"`
 }
 
-func GetProjectTasks(pId uint) ([]*models.Column, []TaskT) {
+func GetProjectTasks(pId uint) ([]*models.Column, []TaskT, []*models.Section) {
 	Columns, errC := (&models.Column{}).GetProjectColumns(pId)
 	if errC != nil {
 
 	}
 	Tasks, errT := (&models.Task{}).GetProjectTasks(pId)
 	if errT != nil {
+
+	}
+	Sections, errS := (&models.Section{}).GetProjectSections(pId)
+	if errS != nil {
 
 	}
 	var arrTasks []TaskT
@@ -142,7 +153,7 @@ func GetProjectTasks(pId uint) ([]*models.Column, []TaskT) {
 		}
 		arrTasks = append(arrTasks, newTask)
 	}
-	return Columns, arrTasks
+	return Columns, arrTasks, Sections
 }
 
 func UpdateInformation(c *gin.Context) {
