@@ -31,10 +31,14 @@ func main() {
 	projects.PATCH("/updateInformation", controllers.UpdateInformation)
 
 	columns := r.Group("/columns")
+	columns.POST("/create", controllers.CreateColumn)
 	columns.PATCH("/update", controllers.UpdateColumn)
 
 	sections := r.Group("/sections")
 	sections.PATCH("/update", controllers.UpdateSection)
+
+	textPoints := r.Group("/textPoints")
+	textPoints.PATCH("/update", controllers.UpdateTextPoint)
 
 	r.Run(":8080")
 

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"github.com/jinzhu/gorm"
 )
 
@@ -29,5 +30,15 @@ func (t *TextPoint) GetTextPoint(tId uint, cId uint) (*TextPoint, error) {
 		return &TextPoint{}, err
 	}
 	return t, err
+
+}
+
+func (t *TextPoint) UpdateTextPoint() (*TextPoint, error) {
+
+	if err := DB.Model(&TextPoint{}).Update(t).Error; err != nil {
+		return t, errors.New("text point not found")
+	}
+
+	return t, nil
 
 }
