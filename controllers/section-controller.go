@@ -24,3 +24,22 @@ func UpdateSection(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 
 }
+
+func CreateSection(c *gin.Context) {
+
+	var input = models.Section{}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	section, err := (&input).Create()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"section": section})
+
+}

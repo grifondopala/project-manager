@@ -35,10 +35,14 @@ func main() {
 	columns.PATCH("/update", controllers.UpdateColumn)
 
 	sections := r.Group("/sections")
+	sections.POST("/create", controllers.CreateSection)
 	sections.PATCH("/update", controllers.UpdateSection)
 
 	textPoints := r.Group("/textPoints")
 	textPoints.PATCH("/update", controllers.UpdateTextPoint)
+
+	tasks := r.Group("/tasks")
+	tasks.POST("/createEmpty", controllers.CreateEmptyTask)
 
 	r.Run(":8080")
 
