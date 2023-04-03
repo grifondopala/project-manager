@@ -30,3 +30,10 @@ func (t *Task) GetProjectTasks(pId uint) (tasks []*Task, err error) {
 	}
 	return tasks, nil
 }
+
+func (t *Task) Update() (task *Task, err error) {
+	if err := DB.Model(&t).Updates(map[string]interface{}{"order_number": t.OrderNumber, "section_id": t.SectionID, "done": t.Done}).Error; err != nil {
+		return &Task{}, errors.New("task not found")
+	}
+	return t, nil
+}

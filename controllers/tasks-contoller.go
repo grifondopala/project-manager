@@ -34,3 +34,21 @@ func CreateEmptyTask(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"task": Task, "points": Points})
 
 }
+
+func UpdateTask(c *gin.Context) {
+
+	var task models.Task
+
+	if err := c.ShouldBindJSON(&task); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	_, err := task.Update()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
+
+}

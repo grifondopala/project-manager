@@ -43,6 +43,7 @@ func main() {
 
 	tasks := r.Group("/tasks")
 	tasks.POST("/createEmpty", controllers.CreateEmptyTask)
+	tasks.PATCH("/update", controllers.UpdateTask)
 
 	r.Run(":8080")
 
