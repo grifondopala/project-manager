@@ -57,6 +57,7 @@ func defaultProjectTemplate(pId uint) {
 		OrderNumber: 1,
 		ProjectID:   pId,
 		SectionID:   FirstSection.ID,
+		Done:        false,
 	}).Create()
 	_, err := (&models.TextPoint{
 		Text:     "Make your list",

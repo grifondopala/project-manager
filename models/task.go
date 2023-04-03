@@ -10,6 +10,7 @@ type Task struct {
 	OrderNumber uint `gorm:"not null;" json:"order_number"`
 	ProjectID   uint `gorm:"not null;" json:"project_id"`
 	SectionID   uint `gorm:"not null;" json:"section_id"`
+	Done        bool `gorm:"not null;default:false" json:"done"`
 }
 
 func (t *Task) Create() (*Task, error) {
